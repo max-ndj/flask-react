@@ -2,9 +2,6 @@ from flask import render_template
 from models.User import db, User
 import hash
 
-def index() -> str:
-    return render_template('index.html')
-
 def select(email: str, password: str) -> bool:
     result = db.session.query(User).filter_by(email=email, password=hash.sha256_hash(password)).first()
 

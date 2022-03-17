@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, request, jsonify
 from flask_migrate import Migrate
 from config import SECRET_KEY
 from controllers.UserController import select, insert, remove
@@ -13,10 +13,6 @@ db.init_app(app)
 migrate = Migrate(app, db)
 
 app.register_blueprint(user_bp, url_prefix='/users')
-
-@app.route('/', methods=['GET'])
-def hello() -> str:
-    return render_template('index.html')
 
 @app.route('/login', methods=['POST'])
 def login() -> str:
