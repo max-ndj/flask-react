@@ -1,4 +1,3 @@
-from flask import render_template
 from models.User import db, User
 import hash
 

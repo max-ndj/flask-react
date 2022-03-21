@@ -9,6 +9,8 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 DEBUG = True
 
+CORS_HEADERS = 'Content-Type'
+
 SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI')
 
 SQLALCHEMY_TRACK_MODIFICATIONS = False

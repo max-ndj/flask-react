@@ -1,20 +1,23 @@
 from flask import Flask, request, jsonify
 from flask_migrate import Migrate
+from flask_cors import CORS, cross_origin
 from config import SECRET_KEY
 from controllers.UserController import select, insert, remove
 from models.User import db
 from routes.user_bp import user_bp
 import jwt
 
-app = Flask(__name__)
-app.config.from_object('config')
+server = Flask(__name__)
+CORS(server)
+server.config.from_object('config')
 
-db.init_app(app)
-migrate = Migrate(app, db)
+db.init_app(server)
+migrate = Migrate(server, db)
 
-app.register_blueprint(user_bp, url_prefix='/users')
+server.register_blueprint(user_bp, url_prefix='/users')
 
-@app.route('/login', methods=['POST'])
+@server.route('/login', methods=['POST'])
+@cross_origin()
 def login() -> str:
     result = select(request.json['email'], request.json['password'])
 
@@ -28,7 +31,8 @@ def login() -> str:
             'message': 'User not found'
         }), 400
 
-@app.route('/register', methods=['POST'])
+@server.route('/register', methods=['POST'])
+@cross_origin()
 def register() -> str:
     result = insert(request.json['email'], request.json['password'])
 
@@ -42,7 +46,8 @@ def register() -> str:
             'message': 'User already exists'
         }), 400
 
-@app.route('/delete/<int:id>', methods=['DELETE'])
+@server.route('/delete/<int:id>', methods=['DELETE'])
+@cross_origin()
 def delete(id: int) -> str:
     result = remove(id)
 
@@ -57,4 +62,4 @@ def delete(id: int) -> str:
     
 
 if __name__ == "__main__":    
-    app.run(debug=True)
+    server.run(debug=True)
